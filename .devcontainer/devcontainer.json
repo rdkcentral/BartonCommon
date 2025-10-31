@@ -1,0 +1,87 @@
+//
+// Created by Kevin Funderburg on 09/11/2024
+//
+
+{
+    "name": "BartonCommon Ubuntu Development Environment",
+    "initializeCommand": "docker/setupDockerEnv.sh",
+    "dockerComposeFile": [
+        "../docker/compose.devcontainer.yaml"
+    ],
+    "service": "devcontainer",
+
+    // keep the local path of our tree the same within the container
+    "workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind",
+    "workspaceFolder": "${localWorkspaceFolder}",
+
+    // ensure special files from local home are available in the container
+    // NOTE: assumes /home/$USER as a homedir within the container
+    // NOTE: VSC will copy some files post-config; .ssh/known_hosts, .gitconfig, etc
+    "mounts": [
+        "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
+        "source=${localEnv:HOME}/.ssh,target=/home/${localEnv:USER}/.ssh,type=bind"
+    ],
+
+    // By setting this value to true, VSC will not run the entrypoint/CMD in the Dockerfile
+    // and instead will start the devcontainer and keep it running indefinitely. Without this,
+    // the container will start and stop immediately after the entrypoint/CMD is executed.
+    "overrideCommand": true,
+
+    // leave the container running when VS Code closes
+    "shutdownAction": "none",
+
+    // A set of name-value pairs that sets or overrides environment variables for VS Code
+    // (or sub-processes like terminals) but not the container as a whole
+    "remoteEnv":
+    {
+        "BUILDER_USER": "${localEnv:USER}",
+        "HOME": "/home/${localEnv:USER}",
+        "GIT_PS1_SHOWDIRTYSTATE": "1",
+        "GIT_PS1_SHOWSTASHSTATE": "1",
+        "GIT_PS1_SHOWCOLORHINTS": "true",
+        "PROMPT_COMMAND": "${localEnv:PROMPT_COMMAND}",
+    },
+
+    // specify the non-root user to use in the container
+    "remoteUser": "${localEnv:USER}",
+
+    "customizations":
+    {
+        "vscode":
+        {
+            "extensions": [
+                // Docker and Container Management
+                "ms-azuretools.vscode-docker",           // Docker support for managing containers
+
+                // C/C++ Development
+                "ms-vscode.cmake-tools",                 // CMake support for build configuration
+                "ms-vscode.cpptools",                    // C/C++ language support with IntelliSense and debugging
+                "ms-vscode.cpptools-extension-pack",     // Additional tools for C/C++ development
+                "llvm-vs-code-extensions.vscode-clangd", // Enhanced C/C++ language support using Clangd
+                "xaver.clang-format",                    // Manually triggered Clang-formatter for C/C++ code
+
+                // Markdown and Documentation
+                "yzhang.markdown-all-in-one",            // All-in-one Markdown support with preview and shortcuts
+
+                // Git and Version Control
+                "eamodio.gitlens",                       // Git enhancements for better insights and navigation
+                "GitHub.vscode-github-actions",          // GitHub Actions support
+                "GitHub.vscode-pull-request-github",     // GitHub Pull Requests and Issues support
+
+                // Code Formatting and Style
+                "aaron-bond.better-comments",            // Enhanced comment formatting
+                "christian-kohler.path-intellisense",    // Filename completion for better navigation
+                "esbenp.prettier-vscode",                // Code formatter for various languages
+                "foxundermoon.shell-format",             // Shell script formatting
+
+                "doi.fileheadercomment"                  // File header comment generator
+            ],
+
+            "settings":
+            {
+                "terminal.integrated.defaultProfile.linux": "bash",
+                "asciidoc.extensions.enableKroki": true
+            }
+        }
+    }
+}
