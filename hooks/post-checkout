@@ -1,0 +1,94 @@
+#!/bin/bash
+
+# ------------------------------ tabstop = 4 ----------------------------------
+#
+# If not stated otherwise in this file or this component's LICENSE file the
+# following copyright and licenses apply:
+#
+# Copyright 2025 Comcast Cable Communications Management, LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+# ------------------------------ tabstop = 4 ----------------------------------
+
+#
+# Created by Kevin Funderburg on 5/27/2025.
+#
+
+print_header_footer() {
+    echo "********************************************************************"
+}
+
+# Compare two version strings semantically
+# Returns true (0) if first arg is greater than second arg, false otherwise
+# Example: version_gt "1.10" "1.2" returns true since 1.10 > 1.2
+version_gt() {
+    test "$(echo "$@" | tr " " "\n" | sort -V | head -n 1)" != "$1"
+}
+
+print_rebase_warning() {
+    echo "         This appears to be an older branch. Options to resolve:"
+    echo "         1. Merge the latest changes from a newer branch."
+    echo "            This preserves your branch history and is generally safer."
+    echo ""
+    echo "         2. Rebase your branch onto a newer branch"
+    echo "            This creates a linear commit history without merge commits,"
+    echo "            but should be used with caution as it rewrites commit history."
+    echo ""
+    echo "         3. Continue using your current environment (no action needed)"
+    echo "            This is fine if you're just exploring or making temporary changes."
+}
+
+print_rebuild_warning() {
+    echo "         Your container might need to be updated. Options to resolve:"
+    echo "         If on CLI:"
+    echo "             You should exit and rebuild your container with:"
+    echo "             $ exit"
+    echo "             $ ./dockerw"
+    echo "         If in a devcontainer:"
+    echo "             You should rebuild your devcontainer by:"
+    echo "             1. Opening the command palette (Ctrl+Shift+P)"
+    echo "             2. Search & select 'Dev Containers: Rebuild Container'"
+}
+
+print_version_mismatch_warning() {
+    echo ""
+    print_header_footer
+    echo "WARNING: Your container is based on the docker-builder version $CURRENT_BUILDER_TAG,"
+    echo "         but the latest version for this lineage is $LATEST_BUILDER_TAG"
+    echo ""
+
+    if version_gt "$CURRENT_BUILDER_TAG" "$LATEST_BUILDER_TAG"; then
+        print_rebase_warning
+    else
+        print_rebuild_warning
+    fi
+
+    print_header_footer
+    echo ""
+}
+
+# Skip check for non-interactive operations
+[ -t 1 ] || exit 0
+
+# Check if we're inside a container
+if [ -f "/.dockerenv" ] && [ -n "$CURRENT_BUILDER_TAG" ]; then
+    # Find the highest versioned image tag reachable by HEAD that matches 'docker-builder-*'
+    LATEST_BUILDER_TAG=$(git tag -l 'docker-builder-*' --sort=-v:refname --merged | head -n 1 | sed 's/docker-builder-//')
+
+    if [ -n "$LATEST_BUILDER_TAG" ] && [ "$CURRENT_BUILDER_TAG" != "$LATEST_BUILDER_TAG" ]; then
+        print_version_mismatch_warning
+    fi
+fi

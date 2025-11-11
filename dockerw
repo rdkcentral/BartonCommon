@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+# ------------------------------ tabstop = 4 ----------------------------------
+#
+# If not stated otherwise in this file or this component's LICENSE file the
+# following copyright and licenses apply:
+#
+# Copyright 2024 Comcast Cable Communications Management, LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+# ------------------------------ tabstop = 4 ----------------------------------
+
+notice() {
+    echo "-- $0: $@"
+}
+
+set -e
+
+if [ -f /.dockerenv ]; then
+    echo "ERROR: dockerw is already running inside a container."
+    echo "Run commands directly in the current container instead of nesting containers."
+    exit 1
+fi
+
+COMPOSE_INTERACTIVE_FLAGS=""
+EXTRA_ENV="-e SSH_AUTH_SOCK"
+DEV_VOL=""
+
+while getopts ":ne:t:d" opt; do
+    case ${opt} in
+    n) # process option n
+        COMPOSE_INTERACTIVE_FLAGS="--no-TTY"
+        ;;
+    e) # extra environment variables
+        EXTRA_ENV="${EXTRA_ENV} -e ${OPTARG}"
+        ;;
+    d) # add /dev volume mapping
+        DEV_VOL="-v /dev:/dev"
+        ;;
+    esac
+done
+shift "$(($OPTIND - 1))"
+DIR=$(pwd)
+
+# generate the `docker/.env` file and ensure the network/image is created
+$DIR/docker/setupDockerEnv.sh
+
+COMPOSE_FILE="${DIR}/docker/compose.yaml"
+
+EXTRA_VOLUMES="${DEV_VOL}"
+
+VOLUMES_ARGS="-v $HOME:$HOME
+             $EXTRA_VOLUMES"
+
+# create a unique container name prefixed with the user id, useful when on a shared machine
+USER_ID=$(id -u -n)
+RANDOM_NUMBER=$(shuf -i 100000-999999 -n 1)
+CONTAINER_NAME="${USER_ID}_${RANDOM_NUMBER}"
+
+docker compose -f "${COMPOSE_FILE}" run \
+    --rm \
+    --name ${CONTAINER_NAME} \
+    ${COMPOSE_INTERACTIVE_FLAGS} \
+    --workdir "${DIR}" \
+    ${VOLUMES_ARGS} \
+    ${EXTRA_ENV} \
+    bartoncommon \

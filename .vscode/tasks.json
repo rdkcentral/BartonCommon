@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run unit tests",
+            "type": "shell",
+            "command": "ctest --output-on-failure --test-dir ${workspaceFolder}/build",
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            }
+        },
+    ]
+}
