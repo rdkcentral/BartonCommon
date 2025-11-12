@@ -91,11 +91,14 @@ message(STATUS "Targetting system - ${CMAKE_SYSTEM_NAME}")
 message(STATUS "Using C toolchain - ${CMAKE_C_COMPILER}")
 message(STATUS "Using C++ toolchain - ${CMAKE_CXX_COMPILER}")
 
-# Add custom target for running tests. This will allow us to easily invoke
-# all tests, as well as wrap them with code coverage if enabled
-add_custom_target(runTests
-    COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-)
+# Add custom target for running tests if it doesn't already exist.
+# This will allow us to easily invoke all tests, as well as wrap
+# them with code coverage if enabled
+if (NOT TARGET runTests)
+    add_custom_target(runTests
+        COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    )
+endif()
 
 add_subdirectory(libs)
