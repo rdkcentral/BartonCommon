@@ -47,6 +47,7 @@ fi
 if [ "$RUN_AS_USER" = "Y" ]; then
     USER=$BUILDER_USER HOME=/home/$BUILDER_USER sudo -E \
     -u $BUILDER_USER \
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
     "$@"
 else
     exec "$@"
