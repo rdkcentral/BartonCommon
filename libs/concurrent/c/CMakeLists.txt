@@ -45,6 +45,9 @@ target_link_libraries(xhConcurrent xhLog xhTypes xhTime)
 # export our 'public' folder so others can include our headers
 target_include_directories(xhConcurrent PUBLIC public)
 
+install(TARGETS xhConcurrent)
+install(DIRECTORY public/ DESTINATION include)
+
 bcommon_configure_glib()
 
 # add our 'unit tests' (part of the "make unitTest")

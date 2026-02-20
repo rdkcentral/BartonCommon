@@ -47,4 +47,7 @@ target_link_libraries(xhXmlHelper xhTypes xhUtil ${XML2_LINK_LIBRARIES})
 # export xml2 includes so that cmake transitively adds it to dependent targets. It's a little lazy
 target_include_directories(xhXmlHelper PUBLIC public ${XML2_INCLUDE_DIRS})
 
+install(TARGETS xhXmlHelper)
+install(DIRECTORY public/ DESTINATION include)
+
 #TODO: test target

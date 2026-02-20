@@ -46,6 +46,9 @@ target_link_libraries(xhJsonHelper cjson xhTypes xhUtil)
 # export our 'public' folder so others can include our headers
 target_include_directories(xhJsonHelper PUBLIC public)
 
+install(TARGETS xhJsonHelper)
+install(DIRECTORY public/ DESTINATION include)
+
 # test target
 bcommon_add_cmocka_test(
         NAME testJsonPointer

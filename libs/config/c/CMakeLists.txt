@@ -38,4 +38,7 @@ add_library(xhConfig STATIC ${SOURCES})
 target_link_libraries(xhConfig xhLog xhUtil xhConcurrent xhTime mbedcrypto ${XML2_LINK_LIBRARIES})
 target_include_directories(xhConfig PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/public PRIVATE ${XML2_INCLUDE_DIRS})
 
+install(TARGETS xhConfig)
+install(DIRECTORY public/ DESTINATION include)
+
 add_subdirectory(test)

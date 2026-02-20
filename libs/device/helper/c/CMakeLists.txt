@@ -45,4 +45,7 @@ target_link_libraries(xhDeviceHelper xhUtil xhLog xhTypes)
 # export our 'public' folder so others can include our headers
 target_include_directories(xhDeviceHelper PUBLIC public)
 
+install(TARGETS xhDeviceHelper)
+install(DIRECTORY public/ DESTINATION include)
+
 #TODO: test target

@@ -47,4 +47,7 @@ bcommon_configure_glib()
 # export our 'public' folder so others can include our headers
 target_include_directories(xhLog PUBLIC public)
 
+install(TARGETS xhLog)
+install(DIRECTORY public/ DESTINATION include)
+
 #TODO: test target

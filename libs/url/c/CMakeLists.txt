@@ -45,6 +45,9 @@ target_link_libraries(xhUrlHelper xhConcurrent xhLog xhTypes xhUtil curl)
 # export our 'public' folder so others can include our headers
 target_include_directories(xhUrlHelper PUBLIC public)
 
+install(TARGETS xhUrlHelper)
+install(DIRECTORY public/ DESTINATION include)
+
 # fetch platform details for urlHelper - userAgent and generate header
 include(FindPkgConfig)
 pkg_check_modules(CURL libcurl)
