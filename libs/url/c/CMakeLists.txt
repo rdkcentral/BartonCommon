@@ -40,7 +40,7 @@ include_directories(
 file(GLOB SOURCES "src/*.c")
 
 add_library(xhUrlHelper STATIC ${SOURCES})
-target_link_libraries(xhUrlHelper xhConcurrent xhLog xhTypes xhUtil curl xhCrypto)
+target_link_libraries(xhUrlHelper xhConcurrent xhLog xhTypes xhUtil curl)
 
 # export our 'public' folder so others can include our headers
 target_include_directories(xhUrlHelper PUBLIC public)
