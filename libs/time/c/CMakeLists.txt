@@ -41,12 +41,13 @@ include_directories(
 file(GLOB SOURCES "src/*.c")
 
 add_library(xhTime STATIC ${SOURCES})
+add_library(BartonCommon::xhTime ALIAS xhTime)
 target_link_libraries(xhTime xhLog xhUtil m ${CONFIG_LDFLAG})
 
 # export our 'public' folder so others can include our headers
 target_include_directories(xhTime PUBLIC public)
 
-install(TARGETS xhTime)
+install(TARGETS xhTime EXPORT BartonCommonTargets)
 install(DIRECTORY public/ DESTINATION include)
 
 # add our 'unit test' to be part of the "make unitTest"

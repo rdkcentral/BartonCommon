@@ -40,12 +40,13 @@ include_directories(
 file(GLOB SOURCES "src/*.[ch]" "public/icConcurrent/*.h")
 
 add_library(xhConcurrent STATIC ${SOURCES})
+add_library(BartonCommon::xhConcurrent ALIAS xhConcurrent)
 target_link_libraries(xhConcurrent xhLog xhTypes xhTime)
 
 # export our 'public' folder so others can include our headers
 target_include_directories(xhConcurrent PUBLIC public)
 
-install(TARGETS xhConcurrent)
+install(TARGETS xhConcurrent EXPORT BartonCommonTargets)
 install(DIRECTORY public/ DESTINATION include)
 
 bcommon_configure_glib()

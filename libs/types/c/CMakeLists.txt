@@ -39,12 +39,13 @@ include_directories(
 file(GLOB SOURCES "src/*.[ch]" "public/icTypes/*.h")
 
 add_library(xhTypes STATIC ${SOURCES})
+add_library(BartonCommon::xhTypes ALIAS xhTypes)
 target_link_libraries(xhTypes xhLog cjson)
 
 # export our 'public' folder so others can include our headers
 target_include_directories(xhTypes PUBLIC public)
 
-install(TARGETS xhTypes)
+install(TARGETS xhTypes EXPORT BartonCommonTargets)
 install(DIRECTORY public/ DESTINATION include)
 
 # add our 'unit test' to be part of the "make unitTest"

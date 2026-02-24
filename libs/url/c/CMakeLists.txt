@@ -40,12 +40,13 @@ include_directories(
 file(GLOB SOURCES "src/*.c")
 
 add_library(xhUrlHelper STATIC ${SOURCES})
+add_library(BartonCommon::xhUrlHelper ALIAS xhUrlHelper)
 target_link_libraries(xhUrlHelper xhConcurrent xhLog xhTypes xhUtil curl)
 
 # export our 'public' folder so others can include our headers
 target_include_directories(xhUrlHelper PUBLIC public)
 
-install(TARGETS xhUrlHelper)
+install(TARGETS xhUrlHelper EXPORT BartonCommonTargets)
 install(DIRECTORY public/ DESTINATION include)
 
 # fetch platform details for urlHelper - userAgent and generate header

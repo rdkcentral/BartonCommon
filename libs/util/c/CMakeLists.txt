@@ -45,13 +45,14 @@ if (CONFIG_OS_DARWIN)
 endif()
 
 add_library(xhUtil STATIC ${SOURCES})
+add_library(BartonCommon::xhUtil ALIAS xhUtil)
 
 target_link_libraries(xhUtil xhLog xhTypes uuid mbedcrypto)
 
 # export our 'public' folder so others can include our headers
 target_include_directories(xhUtil PUBLIC public)
 
-install(TARGETS xhUtil)
+install(TARGETS xhUtil EXPORT BartonCommonTargets)
 install(DIRECTORY public/ DESTINATION include)
 
 add_compile_definitions(PRIVATE RESOURCES_DIR="${CMAKE_CURRENT_LIST_DIR}/test/etc")

@@ -41,13 +41,14 @@ set(LOG_SRC src/loggingDebug.c)
 set(LOG_SRC ${LOG_SRC} src/loggingCommon.c)
 
 add_library(xhLog STATIC ${LOG_SRC})
+add_library(BartonCommon::xhLog ALIAS xhLog)
 
 bcommon_configure_glib()
 
 # export our 'public' folder so others can include our headers
 target_include_directories(xhLog PUBLIC public)
 
-install(TARGETS xhLog)
+install(TARGETS xhLog EXPORT BartonCommonTargets)
 install(DIRECTORY public/ DESTINATION include)
 
 #TODO: test target

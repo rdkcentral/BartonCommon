@@ -21,25 +21,19 @@
 #
 # ------------------------------ tabstop = 4 ----------------------------------
 
-#--------------------------------------------------------------------------------------
-#
-# CMake definition for the fcore 'config library'
-# Should not be utilized directly, but imported from our parent
-# file via the 'add_subdirectory()' routine.
-#
-#--------------------------------------------------------------------------------------
+@PACKAGE_INIT@
 
-# define source files (using wildcard)
-file(GLOB SOURCES "src/*.c")
+include(CMakeFindDependencyMacro)
+include(FindPkgConfig)
 
-pkg_check_modules(XML2 libxml-2.0>=${XML_MIN_VERSION})
+pkg_check_modules(GLIB2 REQUIRED glib-2.0>=@GLIB_MIN_VERSION@)
+pkg_check_modules(CURL REQUIRED libcurl>=@CURL_MIN_VERSION@)
+pkg_check_modules(UUID REQUIRED uuid>=@UUID_MIN_VERSION@)
+pkg_check_modules(XML2 REQUIRED libxml-2.0>=@XML_MIN_VERSION@)
+pkg_check_modules(MBEDCRYPTO REQUIRED mbedcrypto>=@MBEDCRYPTO_MIN_VERSION@)
 
-add_library(xhConfig STATIC ${SOURCES})
-add_library(BartonCommon::xhConfig ALIAS xhConfig)
-target_link_libraries(xhConfig xhLog xhUtil xhConcurrent xhTime mbedcrypto ${XML2_LINK_LIBRARIES})
-target_include_directories(xhConfig PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/public PRIVATE ${XML2_INCLUDE_DIRS})
+find_dependency(cJSON)
 
-install(TARGETS xhConfig EXPORT BartonCommonTargets)
-install(DIRECTORY public/ DESTINATION include)
+include("${CMAKE_CURRENT_LIST_DIR}/BartonCommonTargets.cmake")
 
-add_subdirectory(test)
+check_required_components(BartonCommon)
