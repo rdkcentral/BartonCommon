@@ -30,11 +30,6 @@
 #--------------------------------------------------------------------------------------
 
 
-# setup include paths
-include_directories(
-        ${CMAKE_CURRENT_SOURCE_DIR}/public
-)
-
 # define source files (using wildcard)
 file(GLOB SOURCES "src/*.[ch]" "public/icTypes/*.h")
 
@@ -43,7 +38,9 @@ add_library(BartonCommon::xhTypes ALIAS xhTypes)
 target_link_libraries(xhTypes xhLog cjson)
 
 # export our 'public' folder so others can include our headers
-target_include_directories(xhTypes PUBLIC public)
+target_include_directories(xhTypes PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/public>
+        $<INSTALL_INTERFACE:include>)
 
 install(TARGETS xhTypes EXPORT BartonCommonTargets)
 install(DIRECTORY public/ DESTINATION include)

@@ -31,11 +31,6 @@
 include(BCommonConfigureGLib)
 include(BCommonAddCMockaTest)
 
-# setup include paths
-include_directories(
-        ${CMAKE_CURRENT_SOURCE_DIR}/public
-)
-
 # define source files (using wildcard)
 file(GLOB SOURCES "src/*.[ch]" "public/icConcurrent/*.h")
 
@@ -44,7 +39,9 @@ add_library(BartonCommon::xhConcurrent ALIAS xhConcurrent)
 target_link_libraries(xhConcurrent xhLog xhTypes xhTime)
 
 # export our 'public' folder so others can include our headers
-target_include_directories(xhConcurrent PUBLIC public)
+target_include_directories(xhConcurrent PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/public>
+        $<INSTALL_INTERFACE:include>)
 
 install(TARGETS xhConcurrent EXPORT BartonCommonTargets)
 install(DIRECTORY public/ DESTINATION include)

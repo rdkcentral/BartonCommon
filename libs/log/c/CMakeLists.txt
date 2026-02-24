@@ -29,12 +29,6 @@
 #
 #--------------------------------------------------------------------------------------
 
-# setup include paths
-include_directories(
-        ${CMAKE_CURRENT_SOURCE_DIR}/public
-        ${CROSS_OUTPUT}/include     # 3rd Party
-)
-
 set(LOG_SRC src/loggingDebug.c)
 
 # Add the logging common file
@@ -46,7 +40,9 @@ add_library(BartonCommon::xhLog ALIAS xhLog)
 bcommon_configure_glib()
 
 # export our 'public' folder so others can include our headers
-target_include_directories(xhLog PUBLIC public)
+target_include_directories(xhLog PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/public>
+        $<INSTALL_INTERFACE:include>)
 
 install(TARGETS xhLog EXPORT BartonCommonTargets)
 install(DIRECTORY public/ DESTINATION include)

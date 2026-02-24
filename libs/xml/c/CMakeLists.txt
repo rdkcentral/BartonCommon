@@ -30,12 +30,6 @@
 #--------------------------------------------------------------------------------------
 
 
-# setup include paths
-include_directories(
-        ${CMAKE_CURRENT_SOURCE_DIR}/public
-        ${CROSS_OUTPUT}/include/libxml2     # 3rd Party
-)
-
 # define source files (using wildcard)
 file(GLOB SOURCES "src/*.c")
 
@@ -46,7 +40,10 @@ add_library(BartonCommon::xhXmlHelper ALIAS xhXmlHelper)
 target_link_libraries(xhXmlHelper xhTypes xhUtil ${XML2_LINK_LIBRARIES})
 
 # export xml2 includes so that cmake transitively adds it to dependent targets. It's a little lazy
-target_include_directories(xhXmlHelper PUBLIC public ${XML2_INCLUDE_DIRS})
+target_include_directories(xhXmlHelper PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/public>
+        $<INSTALL_INTERFACE:include>
+        ${XML2_INCLUDE_DIRS})
 
 install(TARGETS xhXmlHelper EXPORT BartonCommonTargets)
 install(DIRECTORY public/ DESTINATION include)

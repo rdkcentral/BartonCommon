@@ -30,12 +30,6 @@
 #--------------------------------------------------------------------------------------
 
 
-# setup include paths
-include_directories(
-        ${CMAKE_CURRENT_SOURCE_DIR}/public
-        ${CROSS_OUTPUT}/include     # 3rd Party
-)
-
 # define source files (using wildcard)
 file(GLOB SOURCES "src/*.c")
 
@@ -44,7 +38,9 @@ add_library(BartonCommon::xhUrlHelper ALIAS xhUrlHelper)
 target_link_libraries(xhUrlHelper xhConcurrent xhLog xhTypes xhUtil curl)
 
 # export our 'public' folder so others can include our headers
-target_include_directories(xhUrlHelper PUBLIC public)
+target_include_directories(xhUrlHelper PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/public>
+        $<INSTALL_INTERFACE:include>)
 
 install(TARGETS xhUrlHelper EXPORT BartonCommonTargets)
 install(DIRECTORY public/ DESTINATION include)
@@ -71,7 +67,7 @@ string(APPEND USER_AGENT_VALUE " ${BARTON_RELEASE_VERSION}")
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_url_helper.h.in
     ${CMAKE_CURRENT_BINARY_DIR}/config_url_helper.h)
 
-INCLUDE_DIRECTORIES(BEFORE ${CMAKE_CURRENT_BINARY_DIR})
+target_include_directories(xhUrlHelper PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
 # # add our 'unit test' to be part of the "make unitTest"
 # add_subdirectory(test)

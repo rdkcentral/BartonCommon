@@ -31,12 +31,6 @@
 
 include(BCommonAddCMockaTest)
 
-# setup include paths
-include_directories(
-        ${CMAKE_CURRENT_SOURCE_DIR}/public
-        ${CROSS_OUTPUT}/include     # 3rd Party
-)
-
 # define source files (using wildcard)
 file(GLOB SOURCES "src/*.[ch]")
 if (CONFIG_OS_DARWIN)
@@ -50,7 +44,9 @@ add_library(BartonCommon::xhUtil ALIAS xhUtil)
 target_link_libraries(xhUtil xhLog xhTypes uuid mbedcrypto)
 
 # export our 'public' folder so others can include our headers
-target_include_directories(xhUtil PUBLIC public)
+target_include_directories(xhUtil PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/public>
+        $<INSTALL_INTERFACE:include>)
 
 install(TARGETS xhUtil EXPORT BartonCommonTargets)
 install(DIRECTORY public/ DESTINATION include)
