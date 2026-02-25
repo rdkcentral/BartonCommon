@@ -30,19 +30,19 @@
 #--------------------------------------------------------------------------------------
 
 
-# setup include paths
-include_directories(
-        ${CMAKE_CURRENT_SOURCE_DIR}/public
-        ${CROSS_OUTPUT}/include     # 3rd Party
-)
-
 # define source files (using wildcard)
 file(GLOB SOURCES "src/*.c")
 
 add_library(xhDeviceHelper STATIC ${SOURCES})
+add_library(BartonCommon::xhDeviceHelper ALIAS xhDeviceHelper)
 target_link_libraries(xhDeviceHelper xhUtil xhLog xhTypes)
 
 # export our 'public' folder so others can include our headers
-target_include_directories(xhDeviceHelper PUBLIC public)
+target_include_directories(xhDeviceHelper PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/public>
+        $<INSTALL_INTERFACE:include>)
+
+install(TARGETS xhDeviceHelper EXPORT BartonCommonTargets)
+install(DIRECTORY public/ DESTINATION include)
 
 #TODO: test target

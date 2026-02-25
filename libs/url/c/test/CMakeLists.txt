@@ -34,12 +34,6 @@
 # not during a cross-compile session).  should be build/ran as part of
 # the 'make unitTest' command
 
-# setup include paths
-include_directories(
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-        ${CROSS_OUTPUT}/include         # 3rd Party
-)
-
 # define source files (using wildcard)
 file(GLOB SOURCES "src/*.c")
 list(FILTER SOURCES EXCLUDE REGEX ".*urlHelperTest.c$")

@@ -36,15 +36,10 @@
 
 include(BCommonAddCMockaTest)
 
-# setup include paths
-include_directories(
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-        ${CROSS_OUTPUT}/include         # 3rd Party
-)
-
 bcommon_add_cmocka_test(
     NAME testStringHashMap
     TEST_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/stringHashTest.c
+    INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src
     LINK_LIBRARIES xhTypes xhJsonHelper
 )
 
@@ -59,5 +54,6 @@ bcommon_add_cmocka_test(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/stringBufferTest.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/typesTest.c
     TEST_ARGS -a
+    INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src
     LINK_LIBRARIES xhTypes xhUtil
 )

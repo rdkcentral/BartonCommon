@@ -31,20 +31,20 @@
 
 include(BCommonAddCMockaTest)
 
-# setup include paths
-include_directories(
-        ${CMAKE_CURRENT_SOURCE_DIR}/public
-        ${CROSS_OUTPUT}/include     # 3rd Party
-)
-
 # define source files (using wildcard)
 file(GLOB SOURCES "src/*.c")
 
 add_library(xhJsonHelper STATIC ${SOURCES})
+add_library(BartonCommon::xhJsonHelper ALIAS xhJsonHelper)
 target_link_libraries(xhJsonHelper cjson xhTypes xhUtil)
 
 # export our 'public' folder so others can include our headers
-target_include_directories(xhJsonHelper PUBLIC public)
+target_include_directories(xhJsonHelper PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/public>
+        $<INSTALL_INTERFACE:include>)
+
+install(TARGETS xhJsonHelper EXPORT BartonCommonTargets)
+install(DIRECTORY public/ DESTINATION include)
 
 # test target
 bcommon_add_cmocka_test(

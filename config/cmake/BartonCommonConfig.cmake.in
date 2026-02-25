@@ -21,30 +21,19 @@
 #
 # ------------------------------ tabstop = 4 ----------------------------------
 
-#--------------------------------------------------------------------------------------
-#
-# CMake definition for the fcore 'log library'
-# Should not be utilized directly, but imported from our parent
-# file via the 'add_subdirectory()' routine.
-#
-#--------------------------------------------------------------------------------------
+@PACKAGE_INIT@
 
-set(LOG_SRC src/loggingDebug.c)
+include(CMakeFindDependencyMacro)
+include(FindPkgConfig)
 
-# Add the logging common file
-set(LOG_SRC ${LOG_SRC} src/loggingCommon.c)
+pkg_check_modules(GLIB2 REQUIRED glib-2.0>=@GLIB_MIN_VERSION@)
+pkg_check_modules(CURL REQUIRED libcurl>=@CURL_MIN_VERSION@)
+pkg_check_modules(UUID REQUIRED uuid>=@UUID_MIN_VERSION@)
+pkg_check_modules(XML2 REQUIRED libxml-2.0>=@XML_MIN_VERSION@)
+pkg_check_modules(MBEDCRYPTO REQUIRED mbedcrypto>=@MBEDCRYPTO_MIN_VERSION@)
 
-add_library(xhLog STATIC ${LOG_SRC})
-add_library(BartonCommon::xhLog ALIAS xhLog)
+find_dependency(cJSON)
 
-bcommon_configure_glib()
+include("${CMAKE_CURRENT_LIST_DIR}/BartonCommonTargets.cmake")
 
-# export our 'public' folder so others can include our headers
-target_include_directories(xhLog PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/public>
-        $<INSTALL_INTERFACE:include>)
-
-install(TARGETS xhLog EXPORT BartonCommonTargets)
-install(DIRECTORY public/ DESTINATION include)
-
-#TODO: test target
+check_required_components(BartonCommon)

@@ -102,3 +102,36 @@ if (NOT TARGET runTests)
 endif()
 
 add_subdirectory(libs)
+
+# ── CMake package configuration export ──────────────────────────────────────
+include(CMakePackageConfigHelpers)
+
+configure_package_config_file(
+        "${PROJECT_SOURCE_DIR}/config/cmake/BartonCommonConfig.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/BartonCommonConfig.cmake"
+        INSTALL_DESTINATION lib/cmake/BartonCommon
+)
+
+if (BARTON_COMMON_SO_VERSION)
+    write_basic_package_version_file(
+            "${CMAKE_CURRENT_BINARY_DIR}/BartonCommonConfigVersion.cmake"
+            VERSION ${BARTON_COMMON_SO_VERSION}
+            COMPATIBILITY SameMajorVersion
+    )
+
+    install(
+            FILES "${CMAKE_CURRENT_BINARY_DIR}/BartonCommonConfigVersion.cmake"
+            DESTINATION lib/cmake/BartonCommon
+    )
+endif()
+
+install(
+        EXPORT BartonCommonTargets
+        DESTINATION lib/cmake/BartonCommon
+        NAMESPACE BartonCommon::
+)
+
+install(
+        FILES "${CMAKE_CURRENT_BINARY_DIR}/BartonCommonConfig.cmake"
+        DESTINATION lib/cmake/BartonCommon
+)

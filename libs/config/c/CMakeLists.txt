@@ -35,7 +35,16 @@ file(GLOB SOURCES "src/*.c")
 pkg_check_modules(XML2 libxml-2.0>=${XML_MIN_VERSION})
 
 add_library(xhConfig STATIC ${SOURCES})
+add_library(BartonCommon::xhConfig ALIAS xhConfig)
 target_link_libraries(xhConfig xhLog xhUtil xhConcurrent xhTime mbedcrypto ${XML2_LINK_LIBRARIES})
-target_include_directories(xhConfig PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/public PRIVATE ${XML2_INCLUDE_DIRS})
+target_include_directories(xhConfig
+        PUBLIC
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/public>
+            $<INSTALL_INTERFACE:include>
+        PRIVATE
+            ${XML2_INCLUDE_DIRS})
+
+install(TARGETS xhConfig EXPORT BartonCommonTargets)
+install(DIRECTORY public/ DESTINATION include)
 
 add_subdirectory(test)
