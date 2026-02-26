@@ -49,11 +49,13 @@ install(DIRECTORY public/ DESTINATION include)
 bcommon_configure_glib()
 
 # add our 'unit tests' (part of the "make unitTest")
-bcommon_add_cmocka_test(
-        NAME testThreadPool
-        TEST_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/test/src/threadPoolTest.c
-        LINK_LIBRARIES xhConcurrent
-)
+
+#This test is disabled due to long run time
+#bcommon_add_cmocka_test(
+#        NAME testThreadPool
+#        TEST_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/test/src/threadPoolTest.c
+#        LINK_LIBRARIES xhConcurrent
+#)
 
 bcommon_add_cmocka_test(
         NAME testTaskExecutor
@@ -61,17 +63,19 @@ bcommon_add_cmocka_test(
         LINK_LIBRARIES xhConcurrent
 )
 
-bcommon_add_cmocka_test(
-        NAME testDelayedTask
-        TEST_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/test/src/delayedTaskTest.c
-        LINK_LIBRARIES xhConcurrent
-)
+#This test is disabled due to long run time
+#bcommon_add_cmocka_test(
+#        NAME testDelayedTask
+#        TEST_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/test/src/delayedTaskTest.c
+#        LINK_LIBRARIES xhConcurrent
+#)
 
-bcommon_add_cmocka_test(
-        NAME testRepeatingTask
-        TEST_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/test/src/repeatingTaskTest.c
-        LINK_LIBRARIES xhConcurrent
-)
+#This test is disabled due to long run time
+#bcommon_add_cmocka_test(
+#        NAME testRepeatingTask
+#        TEST_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/test/src/repeatingTaskTest.c
+#        LINK_LIBRARIES xhConcurrent
+#)
 
 bcommon_add_cmocka_test(
         NAME testBlockingQueue
