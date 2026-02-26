@@ -41,7 +41,7 @@ endif()
 add_library(xhUtil STATIC ${SOURCES})
 add_library(BartonCommon::xhUtil ALIAS xhUtil)
 
-target_link_libraries(xhUtil xhLog xhTypes uuid mbedcrypto)
+target_link_libraries(xhUtil PUBLIC xhLog xhTypes uuid mbedcrypto)
 
 # export our 'public' folder so others can include our headers
 target_include_directories(xhUtil PUBLIC

@@ -35,7 +35,7 @@ file(GLOB SOURCES "src/*.[ch]" "public/icTypes/*.h")
 
 add_library(xhTypes STATIC ${SOURCES})
 add_library(BartonCommon::xhTypes ALIAS xhTypes)
-target_link_libraries(xhTypes xhLog cjson)
+target_link_libraries(xhTypes PUBLIC xhLog cjson)
 
 # export our 'public' folder so others can include our headers
 target_include_directories(xhTypes PUBLIC

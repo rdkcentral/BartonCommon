@@ -33,17 +33,19 @@
 # define source files (using wildcard)
 file(GLOB SOURCES "src/*.c")
 
-pkg_check_modules(XML2 libxml-2.0>=${XML_MIN_VERSION})
+pkg_check_modules(XML2 REQUIRED IMPORTED_TARGET libxml-2.0>=${XML_MIN_VERSION})
 
 add_library(xhXmlHelper STATIC ${SOURCES})
 add_library(BartonCommon::xhXmlHelper ALIAS xhXmlHelper)
-target_link_libraries(xhXmlHelper xhTypes xhUtil ${XML2_LINK_LIBRARIES})
+target_link_libraries(xhXmlHelper
+        PUBLIC $<BUILD_INTERFACE:PkgConfig::XML2>
+        PUBLIC xhTypes xhUtil)
 
-# export xml2 includes so that cmake transitively adds it to dependent targets. It's a little lazy
+# export xml2 includes so that cmake transitively adds it to dependent targets
 target_include_directories(xhXmlHelper PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/public>
         $<INSTALL_INTERFACE:include>
-        ${XML2_INCLUDE_DIRS})
+        $<INSTALL_INTERFACE:${XML2_INCLUDE_DIRS}>)
 
 install(TARGETS xhXmlHelper EXPORT BartonCommonTargets)
 install(DIRECTORY public/ DESTINATION include)

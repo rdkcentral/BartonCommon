@@ -29,11 +29,22 @@ include(FindPkgConfig)
 pkg_check_modules(GLIB2 REQUIRED glib-2.0>=@GLIB_MIN_VERSION@)
 pkg_check_modules(CURL REQUIRED libcurl>=@CURL_MIN_VERSION@)
 pkg_check_modules(UUID REQUIRED uuid>=@UUID_MIN_VERSION@)
-pkg_check_modules(XML2 REQUIRED libxml-2.0>=@XML_MIN_VERSION@)
-pkg_check_modules(MBEDCRYPTO REQUIRED mbedcrypto>=@MBEDCRYPTO_MIN_VERSION@)
+pkg_check_modules(XML2 REQUIRED IMPORTED_TARGET libxml-2.0>=@XML_MIN_VERSION@)
 
 find_dependency(cJSON)
 
 include("${CMAKE_CURRENT_LIST_DIR}/BartonCommonTargets.cmake")
+
+# Promote all imported targets to GLOBAL so they are visible across the entire project
+file(STRINGS "${CMAKE_CURRENT_LIST_DIR}/BartonCommonTargets.cmake" _target_lines REGEX "add_library\\(BartonCommon::")
+foreach(_line IN LISTS _target_lines)
+    string(REGEX MATCH "BartonCommon::[^ )]+" _target "${_line}")
+    if(TARGET ${_target})
+        set_target_properties(${_target} PROPERTIES IMPORTED_GLOBAL TRUE)
+    endif()
+endforeach()
+unset(_target_lines)
+unset(_target)
+unset(_line)
 
 check_required_components(BartonCommon)

@@ -35,7 +35,7 @@ file(GLOB SOURCES "src/*.c")
 
 add_library(xhDeviceHelper STATIC ${SOURCES})
 add_library(BartonCommon::xhDeviceHelper ALIAS xhDeviceHelper)
-target_link_libraries(xhDeviceHelper xhUtil xhLog xhTypes)
+target_link_libraries(xhDeviceHelper PUBLIC xhUtil xhLog xhTypes)
 
 # export our 'public' folder so others can include our headers
 target_include_directories(xhDeviceHelper PUBLIC

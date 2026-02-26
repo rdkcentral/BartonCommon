@@ -35,7 +35,7 @@ file(GLOB SOURCES "src/*.c")
 
 add_library(xhUrlHelper STATIC ${SOURCES})
 add_library(BartonCommon::xhUrlHelper ALIAS xhUrlHelper)
-target_link_libraries(xhUrlHelper xhConcurrent xhLog xhTypes xhUtil curl)
+target_link_libraries(xhUrlHelper PUBLIC xhConcurrent xhLog xhTypes xhUtil curl)
 
 # export our 'public' folder so others can include our headers
 target_include_directories(xhUrlHelper PUBLIC
