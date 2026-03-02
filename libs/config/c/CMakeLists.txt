@@ -37,8 +37,7 @@ pkg_check_modules(XML2 REQUIRED IMPORTED_TARGET libxml-2.0>=${XML_MIN_VERSION})
 add_library(xhConfig STATIC ${SOURCES})
 add_library(BartonCommon::xhConfig ALIAS xhConfig)
 target_link_libraries(xhConfig
-        PUBLIC xhLog xhUtil xhConcurrent xhTime
-        PRIVATE mbedcrypto PkgConfig::XML2)
+        PUBLIC xhLog xhUtil xhConcurrent xhTime mbedcrypto PkgConfig::XML2)
 target_include_directories(xhConfig
         PUBLIC
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/public>
