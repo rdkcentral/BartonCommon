@@ -32,17 +32,16 @@
 # define source files (using wildcard)
 file(GLOB SOURCES "src/*.c")
 
-pkg_check_modules(XML2 libxml-2.0>=${XML_MIN_VERSION})
+pkg_check_modules(XML2 REQUIRED IMPORTED_TARGET libxml-2.0>=${XML_MIN_VERSION})
 
 add_library(xhConfig STATIC ${SOURCES})
 add_library(BartonCommon::xhConfig ALIAS xhConfig)
-target_link_libraries(xhConfig xhLog xhUtil xhConcurrent xhTime mbedcrypto ${XML2_LINK_LIBRARIES})
+target_link_libraries(xhConfig
+        PUBLIC xhLog xhUtil xhConcurrent xhTime mbedcrypto PkgConfig::XML2)
 target_include_directories(xhConfig
         PUBLIC
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/public>
-            $<INSTALL_INTERFACE:include>
-        PRIVATE
-            ${XML2_INCLUDE_DIRS})
+            $<INSTALL_INTERFACE:include>)
 
 install(TARGETS xhConfig EXPORT BartonCommonTargets)
 install(DIRECTORY public/ DESTINATION include)

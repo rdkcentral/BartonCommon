@@ -36,7 +36,7 @@ file(GLOB SOURCES "src/*.c")
 
 add_library(xhJsonHelper STATIC ${SOURCES})
 add_library(BartonCommon::xhJsonHelper ALIAS xhJsonHelper)
-target_link_libraries(xhJsonHelper cjson xhTypes xhUtil)
+target_link_libraries(xhJsonHelper PUBLIC cjson xhTypes xhUtil)
 
 # export our 'public' folder so others can include our headers
 target_include_directories(xhJsonHelper PUBLIC

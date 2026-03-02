@@ -36,7 +36,7 @@ file(GLOB SOURCES "src/*.[ch]" "public/icConcurrent/*.h")
 
 add_library(xhConcurrent STATIC ${SOURCES})
 add_library(BartonCommon::xhConcurrent ALIAS xhConcurrent)
-target_link_libraries(xhConcurrent xhLog xhTypes xhTime)
+target_link_libraries(xhConcurrent PUBLIC xhLog xhTypes xhTime)
 
 # export our 'public' folder so others can include our headers
 target_include_directories(xhConcurrent PUBLIC

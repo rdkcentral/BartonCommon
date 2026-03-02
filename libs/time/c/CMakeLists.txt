@@ -36,7 +36,7 @@ file(GLOB SOURCES "src/*.c")
 
 add_library(xhTime STATIC ${SOURCES})
 add_library(BartonCommon::xhTime ALIAS xhTime)
-target_link_libraries(xhTime xhLog xhUtil m ${CONFIG_LDFLAG})
+target_link_libraries(xhTime PUBLIC xhLog xhUtil m ${CONFIG_LDFLAG})
 
 # export our 'public' folder so others can include our headers
 target_include_directories(xhTime PUBLIC

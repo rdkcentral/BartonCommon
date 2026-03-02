@@ -84,6 +84,7 @@ function(bcommon_add_cmocka_test)
 
         # add library dependencies for this test-binary
         target_link_libraries(${BCOMMON_ADD_CMOCKA_TEST_NAME}
+                                PRIVATE
                                 ${BCOMMON_ADD_CMOCKA_TEST_LINK_LIBRARIES}
                                 cmocka
                                 ${XTRA_LIBS}
