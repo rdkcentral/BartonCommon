@@ -36,16 +36,18 @@ find_dependency(cJSON)
 include("${CMAKE_CURRENT_LIST_DIR}/BartonCommonTargets.cmake")
 
 # Promote all imported BartonCommon targets to GLOBAL so they are visible across the entire project.
-# Use CMake's IMPORTED_TARGETS property instead of parsing the generated Targets file.
-get_property(_imported_targets GLOBAL PROPERTY IMPORTED_TARGETS)
-foreach(_target IN LISTS _imported_targets)
-    if(_target MATCHES "^BartonCommon::")
-        if(TARGET "${_target}")
-            set_target_properties(${_target} PROPERTIES IMPORTED_GLOBAL TRUE)
-        endif()
+# Parse the generated Targets file to get the list of targets.
+# This is necessary because targets created by include() are directory-scoped by default,
+# so they don't appear in the GLOBAL PROPERTY IMPORTED_TARGETS.
+file(STRINGS "${CMAKE_CURRENT_LIST_DIR}/BartonCommonTargets.cmake" _target_lines REGEX "add_library\\(BartonCommon::")
+foreach(_line IN LISTS _target_lines)
+    string(REGEX MATCH "BartonCommon::[^ )]+" _target "${_line}")
+    if(TARGET ${_target})
+        set_target_properties(${_target} PROPERTIES IMPORTED_GLOBAL TRUE)
     endif()
 endforeach()
-unset(_imported_targets)
+unset(_target_lines)
 unset(_target)
+unset(_line)
 
 check_required_components(BartonCommon)
