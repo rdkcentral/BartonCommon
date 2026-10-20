@@ -4,3 +4,6 @@ cmake_install.cmake
 *.env
 build
 .cache
+
+# Git worktrees
+.worktrees/
