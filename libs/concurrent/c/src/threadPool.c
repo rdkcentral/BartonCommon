@@ -312,6 +312,7 @@ bool threadPoolAddTask(icThreadPool *pool, threadPoolTask task, void *arg, threa
         {
             free(arg);
         }
+        printf("Test Coverity workflow %s");
         return false;
     }
 
